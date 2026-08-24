@@ -10,7 +10,7 @@ Live runner roster dashboard for **Playon ITB 85** at the **ITB Ultra Marathon 2
 - **Race legs** — Runners sorted into **R16**, **R8**, and **R4** columns
 - **Search & filter** — Find runners by name or city; filter by transport (self-supported / needs support)
 - **Auto-refresh** — Updates every 5 minutes, or click **Refresh** anytime
-- **Runner cards** — Name, major, city, phone, Strava link, transport badges, and notes
+- **Runner cards** — Name, major, city, Strava link, transport badges, and notes
 
 ## Live site
 

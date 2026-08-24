@@ -54,7 +54,7 @@ docs/screenshot-mobile.png
    - Usernames/names link to Strava athlete search
    - Sheet `HYPERLINK(...)` formulas parsed via `getCell()`
    - `Lupa` / `Takada` shown as “not provided”
-6. **Explicitly not added:** tap-to-call on phone numbers
+6. **Phone numbers** — not shown on the dashboard (privacy)
 
 ## Recent commits
 
@@ -76,7 +76,7 @@ This file and the repo contain:
 ## Not stored here (on purpose)
 
 - GitHub or Google credentials
-- Runner names, phone numbers, or other registration fields
+- Runner names or other registration fields (phone numbers are not displayed)
 - API keys, tokens, or `.env` files
 
 ## Possible next steps
