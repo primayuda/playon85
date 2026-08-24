@@ -2,6 +2,17 @@
 
 Use this file to continue work in a new Cursor chat. It contains project context only — no credentials, tokens, or runner personal data.
 
+## Start here — paste into a new Cursor chat
+
+```
+Continue the Playon ITB 85 runner roster dashboard.
+Read .cursor/SESSION.md and index.html for context.
+Repo: github.com/primayuda/playon-dashboard-2026
+Live: primayuda.github.io/playon-dashboard-2026
+```
+
+Prior chat: [Playon dashboard setup](09e202ea-b974-4ef4-b5a3-1f16673b3e1e)
+
 ## Project
 
 Runner roster dashboard for **Playon ITB 85** at **ITB Ultra Marathon 2026** (16–18 Oktober 2026). Single-page static app that reads registration data from a public Google Sheet and groups runners by race leg (R16, R8, R4).
@@ -52,19 +63,7 @@ docs/screenshot-mobile.png
 | `1b9fa46` | Initial dashboard HTML                       |
 | `cf218fb` | README, mobile layout, GitHub Pages, docs    |
 | `0227929` | Strava profile links on runner cards         |
-
-## Resume in Cursor
-
-Paste into a new chat:
-
-```
-Continue the Playon ITB 85 runner roster dashboard.
-Read .cursor/SESSION.md and index.html for context.
-Repo: github.com/primayuda/playon-dashboard-2026
-Live: primayuda.github.io/playon-dashboard-2026
-```
-
-Prior chat transcript (local Cursor history): [Playon dashboard setup](09e202ea-b974-4ef4-b5a3-1f16673b3e1e)
+| `5841fa2` | Sanitized session resume notes               |
 
 ## Safe to share / publish
 
