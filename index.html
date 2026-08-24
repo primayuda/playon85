@@ -37,6 +37,9 @@
   }
 
   .wrap{max-width:1180px;margin:0 auto;padding:0 24px 64px;}
+  @supports (padding: max(0px)){
+    body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);}
+  }
 
   /* ---------- header ---------- */
   header.top{
@@ -115,6 +118,15 @@
   .stat-pill.r16 .n{color:#8FAAE0;}
   .stat-pill.r8 .n{color:#F0959A;}
   .stat-pill.r4 .n{color:#C7C9CB;}
+
+  button.stat-pill.leg-switch{
+    font:inherit;
+    color:inherit;
+    appearance:none;
+    -webkit-appearance:none;
+    -webkit-tap-highlight-color:transparent;
+    transition:background .15s ease,border-color .15s ease;
+  }
 
   /* ---------- toolbar ---------- */
   .toolbar{
@@ -211,7 +223,117 @@
     gap:22px;
   }
   @media (max-width:860px){
-    .board{grid-template-columns:1fr;}
+    .board{grid-template-columns:1fr;gap:0;}
+
+    .wrap{padding:0 16px max(48px, env(safe-area-inset-bottom));}
+
+    header.top{
+      padding:22px 16px 20px;
+      margin-bottom:20px;
+    }
+    header.top .inner{
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      gap:14px;
+    }
+    header.top .logo{width:56px;height:56px;}
+    .eyebrow{font-size:10.5px;letter-spacing:.1em;}
+    h1{font-size:clamp(34px,10vw,48px);}
+    .sub{
+      font-size:14px;
+      line-height:1.45;
+      margin-bottom:18px;
+      max-width:none;
+    }
+    .stat-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      width:100%;
+    }
+    .stat-pill{
+      justify-content:center;
+      padding:10px 12px;
+    }
+    .stat-pill .n{font-size:24px;}
+    button.stat-pill.leg-switch{cursor:pointer;width:100%;}
+    button.stat-pill.r16.active{background:rgba(143,170,224,0.18);border-color:#8FAAE0;}
+    button.stat-pill.r8.active{background:rgba(240,149,154,0.18);border-color:#F0959A;}
+    button.stat-pill.r4.active{background:rgba(199,201,203,0.22);border-color:#C7C9CB;}
+
+    .toolbar{
+      flex-direction:column;
+      align-items:stretch;
+      gap:10px;
+      margin-bottom:16px;
+    }
+    .toolbar .left{
+      flex-direction:column;
+      min-width:0;
+      width:100%;
+      gap:8px;
+    }
+    .search-box{
+      min-width:0;
+      max-width:none;
+      width:100%;
+    }
+    .search-box input,
+    select#transportFilter{
+      font-size:16px;
+      min-height:44px;
+      padding-top:11px;
+      padding-bottom:11px;
+    }
+    select#transportFilter{width:100%;}
+
+    .toolbar .right{
+      width:100%;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .updated{font-size:10.5px;}
+    button#refreshBtn{
+      min-height:44px;
+      padding:10px 18px;
+      font-size:14px;
+    }
+
+    .banner{
+      flex-wrap:wrap;
+      align-items:flex-start;
+      font-size:13px;
+      line-height:1.45;
+    }
+    .retry{
+      margin-left:0;
+      margin-top:4px;
+      min-height:40px;
+    }
+
+    .board .col{display:none;}
+    .board .col.active{display:flex;}
+    .board .col-head{display:none;}
+
+    .bib{padding:15px 14px 13px;}
+    .bib-name{font-size:17px;}
+    .bib-row{font-size:13px;}
+    .bib-row .val.mono{font-size:12px;word-break:break-all;}
+    .bib-row a{
+      word-break:break-word;
+      line-height:1.35;
+    }
+    .bib-badges{max-width:58%;}
+
+    footer.foot{
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      gap:6px;
+      font-size:11px;
+      line-height:1.45;
+    }
   }
 
   .col{display:flex;flex-direction:column;}
@@ -371,9 +493,9 @@
       <p class="sub">Live feed from the registration form, sorted into race legs. Sourced directly from Google Sheets &mdash; refresh anytime to pull the latest signups.</p>
       <div class="stat-row" id="statRow">
         <div class="stat-pill"><span class="n" id="statTotal">&mdash;</span><span class="l">total runners</span></div>
-        <div class="stat-pill r16"><span class="n" id="statR16">&mdash;</span><span class="l">R16</span></div>
-        <div class="stat-pill r8"><span class="n" id="statR8">&mdash;</span><span class="l">R8</span></div>
-        <div class="stat-pill r4"><span class="n" id="statR4">&mdash;</span><span class="l">R4</span></div>
+        <button type="button" class="stat-pill r16 leg-switch active" data-leg="R16" aria-pressed="true"><span class="n" id="statR16">&mdash;</span><span class="l">R16</span></button>
+        <button type="button" class="stat-pill r8 leg-switch" data-leg="R8" aria-pressed="false"><span class="n" id="statR8">&mdash;</span><span class="l">R8</span></button>
+        <button type="button" class="stat-pill r4 leg-switch" data-leg="R4" aria-pressed="false"><span class="n" id="statR4">&mdash;</span><span class="l">R4</span></button>
       </div>
     </div>
   </div>
@@ -405,15 +527,15 @@
   <div id="statusArea"></div>
 
   <div class="board hidden" id="board">
-    <div class="col r16">
+    <div class="col r16 active" id="colWrapR16">
       <div class="col-head"><span class="title">R16</span><span class="count" id="countR16">0 runners</span></div>
       <div class="cards" id="colR16"></div>
     </div>
-    <div class="col r8">
+    <div class="col r8" id="colWrapR8">
       <div class="col-head"><span class="title">R8</span><span class="count" id="countR8">0 runners</span></div>
       <div class="cards" id="colR8"></div>
     </div>
-    <div class="col r4">
+    <div class="col r4" id="colWrapR4">
       <div class="col-head"><span class="title">R4</span><span class="count" id="countR4">0 runners</span></div>
       <div class="cards" id="colR4"></div>
     </div>
@@ -433,11 +555,35 @@
   var allRunners = [];
 
   var boardEl = document.getElementById('board');
+  var statRowEl = document.getElementById('statRow');
   var statusArea = document.getElementById('statusArea');
   var refreshBtn = document.getElementById('refreshBtn');
   var searchInput = document.getElementById('searchInput');
   var transportFilter = document.getElementById('transportFilter');
   var updatedAt = document.getElementById('updatedAt');
+  var activeLeg = 'R16';
+  var mobileMq = window.matchMedia('(max-width: 860px)');
+
+  function setActiveLeg(leg){
+    activeLeg = leg;
+    ['R16','R8','R4'].forEach(function(cat){
+      var wrap = document.getElementById('colWrap'+cat);
+      var pill = statRowEl.querySelector('.leg-switch[data-leg="'+cat+'"]');
+      var isActive = cat === leg;
+      if(wrap) wrap.classList.toggle('active', isActive);
+      if(pill){
+        pill.classList.toggle('active', isActive);
+        pill.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      }
+    });
+  }
+
+  statRowEl.addEventListener('click', function(e){
+    if(!mobileMq.matches) return;
+    var pill = e.target.closest('.leg-switch[data-leg]');
+    if(!pill) return;
+    setActiveLeg(pill.getAttribute('data-leg'));
+  });
 
   function iconSvg(name){
     var paths = {
@@ -602,6 +748,7 @@
         allRunners = runners;
         clearBanner();
         boardEl.classList.remove('hidden');
+        setActiveLeg(activeLeg);
         render();
         updatedAt.textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
       }catch(err){
