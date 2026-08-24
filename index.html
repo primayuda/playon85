@@ -453,6 +453,13 @@
   .bib-row .val{color:var(--ink);}
   .bib-row .val.mono{font-family:'IBM Plex Mono',monospace;font-size:11.5px;}
   .bib-row a{color:var(--accent-dark);text-decoration:none;}
+  .bib-row a.strava-link{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-weight:500;
+    min-height:24px;
+  }
   .bib-row a:hover{text-decoration:underline;}
   .bib-note{
     margin-top:10px;
@@ -627,17 +634,50 @@
     return null;
   }
 
-  function stravaHtml(raw){
-    if(!raw) return '<span class="val">&mdash;</span>';
+  function getCell(c, idx){
+    if(!c[idx]) return '';
+    var cell = c[idx];
+    if(cell.f){
+      var linkMatch = cell.f.match(/HYPERLINK\s*\(\s*"([^"]+)"/i);
+      if(linkMatch) return linkMatch[1].trim();
+    }
+    if(cell.v !== null && cell.v !== undefined) return String(cell.v).trim();
+    return '';
+  }
+
+  function stravaUrl(raw){
+    if(!raw) return null;
     var s = raw.trim();
     var lower = s.toLowerCase();
-    if(lower === 'lupa' || lower === 'takada'){
-      return '<span class="val">not provided</span>';
+    if(!s || lower === 'lupa' || lower === 'takada') return null;
+
+    if(/^https?:\/\//i.test(s)) return s;
+
+    if(/strava\.(com|app)/i.test(s)){
+      return /^https?:\/\//i.test(s) ? s : 'https://' + s.replace(/^\/+/, '');
     }
-    if(/^https?:\/\//.test(s)){
-      return '<a href="'+escapeHtml(s)+'" target="_blank" rel="noopener">Strava link '+iconSvg('link')+'</a>';
+
+    var term = s.replace(/^@/, '').trim();
+    if(!term) return null;
+
+    return 'https://www.strava.com/athletes/search?text=' + encodeURIComponent(term);
+  }
+
+  function stravaLabel(raw){
+    var s = raw.trim();
+    if(/^https?:\/\//i.test(s) || /strava\.(com|app)/i.test(s)) return 'Strava profile';
+    return s.replace(/^@/, '') === s && /^[a-zA-Z0-9._-]+$/.test(s) ? '@' + s : s;
+  }
+
+  function stravaHtml(raw){
+    var url = stravaUrl(raw);
+    if(!url){
+      if(!raw || !raw.trim()) return '<span class="val">&mdash;</span>';
+      var lower = raw.trim().toLowerCase();
+      if(lower === 'lupa' || lower === 'takada') return '<span class="val">not provided</span>';
+      return '<span class="val">'+escapeHtml(raw.trim())+'</span>';
     }
-    return '<span class="val">'+escapeHtml(s)+'</span>';
+    return '<a class="strava-link" href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(stravaLabel(raw))+' '+iconSvg('link')+'</a>';
   }
 
   function buildBibCard(runner, bibNo){
@@ -729,7 +769,7 @@
         var runners = [];
         rows.forEach(function(row){
           var c = row.c;
-          var get = function(idx){ return c[idx] && c[idx].v !== null && c[idx].v !== undefined ? String(c[idx].v).trim() : ''; };
+          var get = function(idx){ return getCell(c, idx); };
           var name = get(1);
           if(!name) return;
           var categories = parseCategories(get(5));
