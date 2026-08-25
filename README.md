@@ -2,7 +2,21 @@
 
 Live dashboard for **Playon ITB 85** at the **ITB Ultra Marathon 2026** (16–18 Oktober 2026). The page pulls runner and team-support signups from Google Sheets and displays them in three columns: **R16**, **R8**, and **Team Support (TS)**.
 
-![Playon ITB 85 runner roster dashboard](docs/screenshot.png)
+## Live site
+
+**[primayuda.github.io/playon85](https://primayuda.github.io/playon85/)**
+
+Hosted on GitHub Pages from the `main` branch.
+
+### Desktop
+
+![Playon ITB 85 dashboard — R16, R8, and Team Support columns](docs/screenshot-desktop.png)
+
+### Mobile
+
+On narrow screens, tap **R16**, **R8**, or **TS** in the header to switch columns.
+
+![Playon ITB 85 dashboard on mobile](docs/screenshot-mobile.png)
 
 ## Features
 
@@ -14,17 +28,6 @@ Live dashboard for **Playon ITB 85** at the **ITB Ultra Marathon 2026** (16–18
 - **Auto-refresh** — Updates every 5 minutes, or click **Refresh** anytime
 - **Runner cards** — Bib number, name, major, city, Strava link, transport badges, and notes
 - **TS cards** — Supporter name, major, city, support legs, badges, vehicle, and who they support with
-- **Mobile** — On narrow screens, tap **R16**, **R8**, or **TS** in the header to switch columns
-
-### Mobile
-
-![Playon ITB 85 dashboard on mobile](docs/screenshot-mobile.png)
-
-## Live site
-
-**[primayuda.github.io/playon85](https://primayuda.github.io/playon85/)**
-
-Hosted on GitHub Pages from the `main` branch.
 
 ## Data sources
 
