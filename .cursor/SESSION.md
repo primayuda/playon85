@@ -95,6 +95,7 @@ Runners are bucketed into **R16** and **R8** only (`parseCategories` on col 5). 
 
 | Commit   | Summary |
 |----------|---------|
+| `e7283d9` | Green/red Strava link styling; session resume for manual Strava cleanup |
 | `dc4ce35` | Update session resume with README screenshot work |
 | `c87fa68` | Constrain README mobile screenshot to 320px width |
 | `0850001` | iPhone 13 viewport for README mobile screenshot |
