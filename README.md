@@ -16,7 +16,7 @@ Hosted on GitHub Pages from the `main` branch.
 
 On a phone, stats appear in a 2×2 grid and one leg is shown at a time — tap **R16**, **R8**, or **TS** to switch.
 
-![Playon ITB 85 on iPhone — R16 leg selected, single-column card list](docs/screenshot-mobile.png)
+<img src="docs/screenshot-mobile.png" alt="Playon ITB 85 on iPhone — R16 leg selected, single-column card list" width="320">
 
 ## Features
 
