@@ -11,7 +11,7 @@ Repo: github.com/primayuda/playon85
 Live: primayuda.github.io/playon85
 ```
 
-Prior chat: [TS column and Strava validation](a683995c-67f1-497b-a0a6-1919038ddd73)
+Prior chat: [TS column, Strava, README screenshots](a683995c-67f1-497b-a0a6-1919038ddd73)
 
 ## Project
 
@@ -26,12 +26,12 @@ Runner roster dashboard for **Playon ITB 85** at **ITB Ultra Marathon 2026** (16
 ## Project layout
 
 ```
-index.html          # Entire app (HTML, CSS, JS)
-README.md           # Project overview + live link (still mentions R4 — not updated yet)
-docs/screenshot.png # Desktop screenshot for README
+index.html               # Entire app (HTML, CSS, JS)
+README.md                # Project overview, live link, screenshots
+docs/screenshot-desktop.png
 docs/screenshot-mobile.png
 favicon.png
-.cursor/SESSION.md  # This resume file
+.cursor/SESSION.md       # This resume file
 ```
 
 ## Stack & data flow
@@ -65,13 +65,16 @@ Runners are bucketed into **R16** and **R8** only (`parseCategories` on col 5). 
 1. **Header** — Eyebrow: “Playon - ITB Ultra Marathon - 16 - 18 Oktober 2026”; title “Runner roster”; stat pills: unique runners, R16, R8, **TS**
 2. **Runner cards** — Bib `01` format; R8 sage green; **needs-support** runners get red accent (`.bib.needs-support`)
 3. **Team Support column** — Replaces former R4 column; clay/amber styling; `buildTsCard()` shows name, major, city, legs (3-line clamp), support type badges, vehicle, with-who, notes
-4. **Mobile** (≤860px) — Tap **R16 / R8 / TS** stat pills to switch columns
+4. **Mobile** (≤860px) — 2×2 stat grid; tap **R16 / R8 / TS** pills to switch single-column view; column headers hidden
 5. **Strava links** on runner cards:
    - Full URLs (including `strava.app.link`) open directly
    - Usernames/names link to Strava athlete search
    - Sheet `HYPERLINK(...)` formulas parsed via `getCell()`
    - `Lupa` / `Takada` shown as “not provided”
 6. **Phone numbers** — not shown on dashboard (runners or TS)
+7. **README** — Updated for R16/R8/TS; viewport screenshots from live site:
+   - Desktop: `docs/screenshot-desktop.png` (1440×900, three columns incl. Team Support)
+   - Mobile: `docs/screenshot-mobile.png` (iPhone 13 profile); shown in README at `width="320"` via HTML `<img>` to avoid full-width blow-up
 
 ## Key JS symbols (`index.html`)
 
@@ -83,12 +86,13 @@ Runners are bucketed into **R16** and **R8** only (`parseCategories` on col 5). 
 
 | Commit   | Summary |
 |----------|---------|
+| `c87fa68` | Constrain README mobile screenshot to 320px width |
+| `0850001` | iPhone 13 viewport for README mobile screenshot |
+| `3b356d6` | Fix README desktop screenshot (TS not R4); new filename for cache bust |
+| `5891c5b` | Update README and screenshots for R16/R8/TS layout |
+| `2b01529` | Update session resume notes |
 | `b0a0bc0` | Replace R4 column with Team Support from second sheet |
 | `e8405e6` | Header total counts unique runners only |
-| `5d604fc` | Site title, favicon, header typography |
-| `ab1f77e` | Sage R8 leg; red accent for needs-support runners |
-| `fca4f34` | Docs: playon85 repo and Pages URLs |
-| `84cc3d2` | Remove phone numbers from runner cards |
 
 ## In progress / discussed — NOT implemented
 
@@ -131,7 +135,6 @@ User asked to connect to Strava API and validate runner Strava IDs. **Not built 
 ## Possible next steps
 
 - Implement Strava validation pipeline (see above)
-- Update `README.md` for TS column and remove R4 references; refresh screenshots
-- Update `SESSION.md` prior chat link after new sessions
 - Custom domain for GitHub Pages
 - Column index changes if Google Sheet layout changes (see `parseRunners` / `parseTs`)
+- Re-capture README screenshots after major UI changes (Playwright + live site URL)
