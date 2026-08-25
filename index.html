@@ -23,6 +23,9 @@
     --clay:#6B6D70;
     --clay-dark:#4A4C4F;
     --clay-tint:#E4E4E3;
+    --sage:#4A7C6F;
+    --sage-dark:#2D5A47;
+    --sage-tint:#D8E8E3;
     --fog:#75787B;
     --line:#DBDBD8;
   }
@@ -116,7 +119,7 @@
     color:#B8CBB9;
   }
   .stat-pill.r16 .n{color:#8FAAE0;}
-  .stat-pill.r8 .n{color:#F0959A;}
+  .stat-pill.r8 .n{color:#7BAF9E;}
   .stat-pill.r4 .n{color:#C7C9CB;}
 
   button.stat-pill.leg-switch{
@@ -259,7 +262,7 @@
     .stat-pill .n{font-size:24px;}
     button.stat-pill.leg-switch{cursor:pointer;width:100%;}
     button.stat-pill.r16.active{background:rgba(143,170,224,0.18);border-color:#8FAAE0;}
-    button.stat-pill.r8.active{background:rgba(240,149,154,0.18);border-color:#F0959A;}
+    button.stat-pill.r8.active{background:rgba(123,175,158,0.18);border-color:#7BAF9E;}
     button.stat-pill.r4.active{background:rgba(199,201,203,0.22);border-color:#C7C9CB;}
 
     .toolbar{
@@ -357,7 +360,7 @@
     color:var(--fog);
   }
   .col.r16{--accent-color:var(--moss);--accent-dark:var(--moss-dark);--accent-tint:var(--moss-tint);}
-  .col.r8{--accent-color:var(--orange);--accent-dark:var(--orange-dark);--accent-tint:var(--orange-tint);}
+  .col.r8{--accent-color:var(--sage);--accent-dark:var(--sage-dark);--accent-tint:var(--sage-tint);}
   .col.r4{--accent-color:var(--clay);--accent-dark:var(--clay-dark);--accent-tint:var(--clay-tint);}
 
   .cards{display:flex;flex-direction:column;gap:14px;}
@@ -379,6 +382,12 @@
     border-radius:6px;
     padding:16px 16px 14px;
     overflow:visible;
+  }
+  .bib.needs-support{
+    --accent-color:var(--orange);
+    --accent-dark:var(--orange-dark);
+    --accent-tint:var(--orange-tint);
+    border-color:#E7B6A6;
   }
   .bib::before,.bib::after{
     content:"";
@@ -691,10 +700,10 @@
     var noteHtml = runner.note ? '<div class="bib-note">"'+escapeHtml(runner.note)+'"</div>' : '';
 
     return ''+
-    '<div class="bib" data-name="'+escapeHtml((runner.name+' '+runner.city).toLowerCase())+'" data-transport="'+(tk||'')+'">'+
+    '<div class="bib'+(tk === 'support' ? ' needs-support' : '')+'" data-name="'+escapeHtml((runner.name+' '+runner.city).toLowerCase())+'" data-transport="'+(tk||'')+'">'+
       '<div class="perf"></div>'+
       '<div class="bib-top">'+
-        '<span class="bib-no">No. '+String(bibNo).padStart(2,'0')+'</span>'+
+        '<span class="bib-no">'+String(bibNo).padStart(2,'0')+'</span>'+
         '<div class="bib-badges">'+badges+'</div>'+
       '</div>'+
       '<p class="bib-name">'+escapeHtml(runner.name)+'</p>'+
