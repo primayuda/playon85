@@ -1,16 +1,24 @@
 # Playon ITB 85 — Runner Roster Dashboard
 
-Live runner roster dashboard for **Playon ITB 85** at the **ITB Ultra Marathon 2026** (16–18 Oktober 2026). The page pulls registration data from Google Sheets and displays runners grouped by race leg.
+Live dashboard for **Playon ITB 85** at the **ITB Ultra Marathon 2026** (16–18 Oktober 2026). The page pulls runner and team-support signups from Google Sheets and displays them in three columns: **R16**, **R8**, and **Team Support (TS)**.
 
 ![Playon ITB 85 runner roster dashboard](docs/screenshot.png)
 
 ## Features
 
-- **Live roster** — Fetches the latest signups from a Google Sheet (view-only)
-- **Race legs** — Runners sorted into **R16**, **R8**, and **R4** columns
-- **Search & filter** — Find runners by name or city; filter by transport (self-supported / needs support)
+- **Live roster** — Fetches the latest runner signups from a Google Sheet (view-only)
+- **Team Support** — Separate column for TS volunteers (legs, support type, vehicle, notes)
+- **Race legs** — Runners grouped into **R16** and **R8** columns
+- **Header stats** — Unique runner count plus R16, R8, and TS totals
+- **Search & filter** — Search runners and supporters by name or city; filter runners by transport (self-supported / needs support)
 - **Auto-refresh** — Updates every 5 minutes, or click **Refresh** anytime
-- **Runner cards** — Name, major, city, Strava link, transport badges, and notes
+- **Runner cards** — Bib number, name, major, city, Strava link, transport badges, and notes
+- **TS cards** — Supporter name, major, city, support legs, badges, vehicle, and who they support with
+- **Mobile** — On narrow screens, tap **R16**, **R8**, or **TS** in the header to switch columns
+
+### Mobile
+
+![Playon ITB 85 dashboard on mobile](docs/screenshot-mobile.png)
 
 ## Live site
 
@@ -18,9 +26,16 @@ Live runner roster dashboard for **Playon ITB 85** at the **ITB Ultra Marathon 2
 
 Hosted on GitHub Pages from the `main` branch.
 
-## Data source
+## Data sources
 
-Runner data comes from a Google Sheets registration form. The sheet must be shared as **“Anyone with the link can view”** for the dashboard to load.
+Two Google Sheets registration forms feed the dashboard. Both must be shared as **“Anyone with the link can view”**:
+
+| Sheet | Used for |
+|-------|----------|
+| Runner roster | R16 and R8 runner cards |
+| Team Support | TS supporter cards |
+
+Phone numbers from either form are not shown on the dashboard.
 
 ## Repository
 
