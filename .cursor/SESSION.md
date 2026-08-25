@@ -1,4 +1,4 @@
-# Session resume — playon-dashboard-2026
+# Session resume — playon85
 
 Use this file to continue work in a new Cursor chat. It contains project context only — no credentials, tokens, or runner personal data.
 
@@ -7,8 +7,8 @@ Use this file to continue work in a new Cursor chat. It contains project context
 ```
 Continue the Playon ITB 85 runner roster dashboard.
 Read .cursor/SESSION.md and index.html for context.
-Repo: github.com/primayuda/playon-dashboard-2026
-Live: primayuda.github.io/playon-dashboard-2026
+Repo: github.com/primayuda/playon85
+Live: primayuda.github.io/playon85
 ```
 
 Prior chat: [Playon dashboard setup](09e202ea-b974-4ef4-b5a3-1f16673b3e1e)
@@ -19,8 +19,8 @@ Runner roster dashboard for **Playon ITB 85** at **ITB Ultra Marathon 2026** (16
 
 ## Live site & repo
 
-- **GitHub Pages:** https://primayuda.github.io/playon-dashboard-2026/
-- **GitHub repo:** https://github.com/primayuda/playon-dashboard-2026
+- **GitHub Pages:** https://primayuda.github.io/playon85/
+- **GitHub repo:** https://github.com/primayuda/playon85
 - **Branch:** `main` (GitHub Pages deploys from repo root)
 
 ## Project layout
@@ -42,7 +42,7 @@ docs/screenshot-mobile.png
 
 ## Features implemented (Aug 2026 session)
 
-1. **GitHub repo** — `primayuda/playon-dashboard-2026`, initial commit pushed
+1. **GitHub repo** — `primayuda/playon85`, initial commit pushed
 2. **README** — features, live site link, screenshot (no local dev instructions)
 3. **GitHub Pages** — enabled from `main` / root
 4. **Mobile layout** (≤860px):
@@ -64,6 +64,8 @@ docs/screenshot-mobile.png
 | `cf218fb` | README, mobile layout, GitHub Pages, docs    |
 | `0227929` | Strava profile links on runner cards         |
 | `5841fa2` | Sanitized session resume notes               |
+| `82e5b4a` | Move session resume prompt to top of SESSION.md |
+| `84cc3d2` | Remove phone numbers from runner cards (privacy) |
 
 ## Safe to share / publish
 

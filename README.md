@@ -14,7 +14,7 @@ Live runner roster dashboard for **Playon ITB 85** at the **ITB Ultra Marathon 2
 
 ## Live site
 
-**[primayuda.github.io/playon-dashboard-2026](https://primayuda.github.io/playon-dashboard-2026/)**
+**[primayuda.github.io/playon85](https://primayuda.github.io/playon85/)**
 
 Hosted on GitHub Pages from the `main` branch.
 
@@ -24,4 +24,4 @@ Runner data comes from a Google Sheets registration form. The sheet must be shar
 
 ## Repository
 
-[github.com/primayuda/playon-dashboard-2026](https://github.com/primayuda/playon-dashboard-2026)
+[github.com/primayuda/playon85](https://github.com/primayuda/playon85)
