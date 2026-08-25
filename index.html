@@ -122,7 +122,7 @@
   }
   .stat-pill.r16 .n{color:#8FAAE0;}
   .stat-pill.r8 .n{color:#7BAF9E;}
-  .stat-pill.r4 .n{color:#C7C9CB;}
+  .stat-pill.ts .n{color:#C9B896;}
 
   button.stat-pill.leg-switch{
     font:inherit;
@@ -265,7 +265,7 @@
     button.stat-pill.leg-switch{cursor:pointer;width:100%;}
     button.stat-pill.r16.active{background:rgba(143,170,224,0.18);border-color:#8FAAE0;}
     button.stat-pill.r8.active{background:rgba(123,175,158,0.18);border-color:#7BAF9E;}
-    button.stat-pill.r4.active{background:rgba(199,201,203,0.22);border-color:#C7C9CB;}
+    button.stat-pill.ts.active{background:rgba(201,184,150,0.22);border-color:#C9B896;}
 
     .toolbar{
       flex-direction:column;
@@ -363,7 +363,7 @@
   }
   .col.r16{--accent-color:var(--moss);--accent-dark:var(--moss-dark);--accent-tint:var(--moss-tint);}
   .col.r8{--accent-color:var(--sage);--accent-dark:var(--sage-dark);--accent-tint:var(--sage-tint);}
-  .col.r4{--accent-color:var(--clay);--accent-dark:var(--clay-dark);--accent-tint:var(--clay-tint);}
+  .col.ts{--accent-color:var(--clay);--accent-dark:var(--clay-dark);--accent-tint:var(--clay-tint);}
 
   .cards{display:flex;flex-direction:column;gap:14px;}
 
@@ -463,6 +463,13 @@
   .bib-row svg{flex-shrink:0;opacity:.55;}
   .bib-row .val{color:var(--ink);}
   .bib-row .val.mono{font-family:'IBM Plex Mono',monospace;font-size:11.5px;}
+  .bib-row .val.clamp{
+    display:-webkit-box;
+    -webkit-line-clamp:3;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+    line-height:1.4;
+  }
   .bib-row a{color:var(--accent-dark);text-decoration:none;}
   .bib-row a.strava-link{
     display:inline-flex;
@@ -513,7 +520,7 @@
         <div class="stat-pill"><span class="n" id="statTotal">&mdash;</span><span class="l">unique runners</span></div>
         <button type="button" class="stat-pill r16 leg-switch active" data-leg="R16" aria-pressed="true"><span class="n" id="statR16">&mdash;</span><span class="l">R16</span></button>
         <button type="button" class="stat-pill r8 leg-switch" data-leg="R8" aria-pressed="false"><span class="n" id="statR8">&mdash;</span><span class="l">R8</span></button>
-        <button type="button" class="stat-pill r4 leg-switch" data-leg="R4" aria-pressed="false"><span class="n" id="statR4">&mdash;</span><span class="l">R4</span></button>
+        <button type="button" class="stat-pill ts leg-switch" data-leg="TS" aria-pressed="false"><span class="n" id="statTS">&mdash;</span><span class="l">TS</span></button>
       </div>
     </div>
   </div>
@@ -553,9 +560,9 @@
       <div class="col-head"><span class="title">R8</span><span class="count" id="countR8">0 runners</span></div>
       <div class="cards" id="colR8"></div>
     </div>
-    <div class="col r4" id="colWrapR4">
-      <div class="col-head"><span class="title">R4</span><span class="count" id="countR4">0 runners</span></div>
-      <div class="cards" id="colR4"></div>
+    <div class="col ts" id="colWrapTS">
+      <div class="col-head"><span class="title">Team Support</span><span class="count" id="countTS">0 supporters</span></div>
+      <div class="cards" id="colTS"></div>
     </div>
   </div>
 
@@ -568,9 +575,12 @@
 
 <script>
 (function(){
-  var SHEET_ID = "1TKYamPbDz65cm0HLCMN1obGsUsGF6L8cbWCdxbM4-rA";
+  var RUNNER_SHEET_ID = "1TKYamPbDz65cm0HLCMN1obGsUsGF6L8cbWCdxbM4-rA";
+  var TS_SHEET_ID = "1eQIoh0uS6ljakp6ws7AW_JJPUYUfybGOs3EMc5VF6KY";
   var callbackCounter = 0;
   var allRunners = [];
+  var allTs = [];
+  var boardSections = ['R16', 'R8', 'TS'];
 
   var boardEl = document.getElementById('board');
   var statRowEl = document.getElementById('statRow');
@@ -584,7 +594,7 @@
 
   function setActiveLeg(leg){
     activeLeg = leg;
-    ['R16','R8','R4'].forEach(function(cat){
+    boardSections.forEach(function(cat){
       var wrap = document.getElementById('colWrap'+cat);
       var pill = statRowEl.querySelector('.leg-switch[data-leg="'+cat+'"]');
       var isActive = cat === leg;
@@ -607,7 +617,10 @@
     var paths = {
       pin:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
       run:'<circle cx="17" cy="4" r="2"/><path d="M9 20l1.5-5L8 12l2-6 4 3 3 1M6 20l3-6"/>',
-      link:'<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>'
+      link:'<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+      map:'<polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>',
+      car:'<path d="M7 17h10M5 17H3v-3l2-5h14l2 5v3h-2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/>',
+      users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'
     };
     return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+paths[name]+'</svg>';
   }
@@ -631,6 +644,59 @@
 
   function clearBanner(){ statusArea.innerHTML = ''; }
 
+  function splitTags(raw){
+    if(!raw) return [];
+    return raw.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  }
+
+  function legCount(raw){
+    if(!raw) return 0;
+    var matches = raw.match(/Leg\s+\d+/gi);
+    return matches ? matches.length : 0;
+  }
+
+  function parseRunners(rows){
+    var runners = [];
+    rows.forEach(function(row){
+      var c = row.c;
+      var get = function(idx){ return getCell(c, idx); };
+      var name = get(1);
+      if(!name) return;
+      var categories = parseCategories(get(5));
+      if(categories.length === 0) return;
+      runners.push({
+        name: name,
+        major: get(2),
+        city: get(3),
+        categories: categories,
+        strava: get(8),
+        transport: get(10),
+        note: get(11)
+      });
+    });
+    return runners;
+  }
+
+  function parseTs(rows){
+    var supporters = [];
+    rows.forEach(function(row){
+      var c = row.c;
+      var get = function(idx){ return getCell(c, idx); };
+      var name = get(1);
+      if(!name) return;
+      supporters.push({
+        name: name,
+        major: get(2),
+        city: get(3),
+        legs: get(5),
+        supportType: get(6),
+        vehicle: get(7),
+        withWho: get(8),
+        note: get(9)
+      });
+    });
+    return supporters;
+  }
   function parseCategories(raw){
     if(!raw) return [];
     return raw.split('/').map(function(s){ return s.trim().toUpperCase(); }).filter(Boolean);
@@ -718,11 +784,48 @@
     '</div>';
   }
 
+  function buildTsCard(ts, no){
+    var badges = '';
+    var legs = ts.legs || '';
+    var nLegs = legCount(legs);
+    if(nLegs) badges += '<span class="badge dual">'+nLegs+' leg'+(nLegs === 1 ? '' : 's')+'</span>';
+
+    splitTags(ts.supportType).forEach(function(tag){
+      badges += '<span class="badge self">'+escapeHtml(tag)+'</span>';
+    });
+
+    var noteHtml = ts.note ? '<div class="bib-note">"'+escapeHtml(ts.note)+'"</div>' : '';
+    var withHtml = ts.withWho
+      ? '<div class="bib-row">'+iconSvg('users')+'<span class="val">'+escapeHtml(ts.withWho)+'</span></div>'
+      : '';
+    var vehicleHtml = ts.vehicle
+      ? '<div class="bib-row">'+iconSvg('car')+'<span class="val">'+escapeHtml(ts.vehicle)+'</span></div>'
+      : '';
+
+    return ''+
+    '<div class="bib ts-card" data-name="'+escapeHtml((ts.name+' '+(ts.city||'')).toLowerCase())+'">'+
+      '<div class="perf"></div>'+
+      '<div class="bib-top">'+
+        '<span class="bib-no">'+String(no).padStart(2,'0')+'</span>'+
+        '<div class="bib-badges">'+badges+'</div>'+
+      '</div>'+
+      '<p class="bib-name">'+escapeHtml(ts.name)+'</p>'+
+      '<p class="bib-meta">'+escapeHtml(ts.major || 'Jurusan tidak diisi')+'</p>'+
+      '<div class="bib-rows">'+
+        '<div class="bib-row">'+iconSvg('pin')+'<span class="val">'+escapeHtml(ts.city || '&mdash;')+'</span></div>'+
+        (legs ? '<div class="bib-row">'+iconSvg('map')+'<span class="val clamp">'+escapeHtml(legs)+'</span></div>' : '')+
+        withHtml+
+        vehicleHtml+
+      '</div>'+
+      noteHtml+
+    '</div>';
+  }
+
   function render(){
     var query = searchInput.value.trim().toLowerCase();
     var tFilter = transportFilter.value;
 
-    var buckets = { R16: [], R8: [], R4: [] };
+    var buckets = { R16: [], R8: [] };
     allRunners.forEach(function(r){
       r.categories.forEach(function(cat){
         if(buckets[cat]) buckets[cat].push(r);
@@ -733,9 +836,9 @@
     document.getElementById('statTotal').textContent = totalUnique;
     document.getElementById('statR16').textContent = buckets.R16.length;
     document.getElementById('statR8').textContent = buckets.R8.length;
-    document.getElementById('statR4').textContent = buckets.R4.length;
+    document.getElementById('statTS').textContent = allTs.length;
 
-    ['R16','R8','R4'].forEach(function(cat){
+    ['R16','R8'].forEach(function(cat){
       var colEl = document.getElementById('col'+cat);
       var countEl = document.getElementById('count'+cat);
       var list = buckets[cat].filter(function(r){
@@ -753,73 +856,81 @@
         colEl.innerHTML = list.map(function(r, i){ return buildBibCard(r, i+1); }).join('');
       }
     });
+
+    var tsCol = document.getElementById('colTS');
+    var tsCount = document.getElementById('countTS');
+    var tsList = allTs.filter(function(ts){
+      return !query || (ts.name.toLowerCase().indexOf(query) !== -1 || (ts.city||'').toLowerCase().indexOf(query) !== -1);
+    });
+
+    tsCount.textContent = tsList.length + (tsList.length === 1 ? ' supporter' : ' supporters');
+
+    if(tsList.length === 0){
+      tsCol.innerHTML = '<div class="empty-col">No team support signups yet.</div>';
+    } else {
+      tsCol.innerHTML = tsList.map(function(ts, i){ return buildTsCard(ts, i+1); }).join('');
+    }
+  }
+
+  function fetchSheet(sheetId){
+    return new Promise(function(resolve, reject){
+      var cbName = 'sheetCallback_' + (callbackCounter++);
+      var timeoutId = setTimeout(function(){
+        if(window[cbName]){
+          window[cbName] = null;
+          reject(new Error('timeout'));
+        }
+      }, 12000);
+
+      window[cbName] = function(data){
+        clearTimeout(timeoutId);
+        window[cbName] = null;
+        var scriptTag = document.getElementById('sheetScript_' + cbName);
+        if(scriptTag) scriptTag.remove();
+        try{
+          resolve(data.table.rows);
+        }catch(err){
+          reject(err);
+        }
+      };
+
+      var script = document.createElement('script');
+      script.id = 'sheetScript_' + cbName;
+      script.src = 'https://docs.google.com/spreadsheets/d/' + sheetId + '/gviz/tq?tqx=out:json;responseHandler:' + cbName + '&_=' + Date.now();
+      script.onerror = function(){
+        clearTimeout(timeoutId);
+        window[cbName] = null;
+        script.remove();
+        reject(new Error('network'));
+      };
+      document.body.appendChild(script);
+    });
   }
 
   function loadData(){
     clearBanner();
     boardEl.classList.add('hidden');
-    showBanner('loading', 'Loading runner data from Google Sheets&hellip;', false);
+    showBanner('loading', 'Loading runner roster and team support data&hellip;', false);
     refreshBtn.classList.add('spinning');
 
-    var cbName = 'sheetCallback_' + (callbackCounter++);
-    var timeoutId = setTimeout(function(){
-      if(window[cbName]){
-        window[cbName] = null;
-        refreshBtn.classList.remove('spinning');
-        showBanner('error', 'The sheet took too long to respond. It may not be shared as "Anyone with the link can view".', true);
-      }
-    }, 12000);
-
-    window[cbName] = function(data){
-      clearTimeout(timeoutId);
+    Promise.all([
+      fetchSheet(RUNNER_SHEET_ID),
+      fetchSheet(TS_SHEET_ID).catch(function(){ return null; })
+    ]).then(function(results){
       refreshBtn.classList.remove('spinning');
-      try{
-        var rows = data.table.rows;
-        var runners = [];
-        rows.forEach(function(row){
-          var c = row.c;
-          var get = function(idx){ return getCell(c, idx); };
-          var name = get(1);
-          if(!name) return;
-          var categories = parseCategories(get(5));
-          if(categories.length === 0) return;
-          runners.push({
-            name: name,
-            major: get(2),
-            city: get(3),
-            categories: categories,
-            strava: get(8),
-            transport: get(10),
-            note: get(11)
-          });
-        });
-        allRunners = runners;
-        clearBanner();
-        boardEl.classList.remove('hidden');
-        setActiveLeg(activeLeg);
-        render();
-        updatedAt.textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-      }catch(err){
-        showBanner('error', 'Could not parse the sheet data. The sheet layout may have changed.', true);
-      }
-      var scriptTag = document.getElementById('sheetScript');
-      if(scriptTag) scriptTag.remove();
-      window[cbName] = null;
-    };
+      allRunners = parseRunners(results[0]);
+      if(results[1]) allTs = parseTs(results[1]);
 
-    var oldScript = document.getElementById('sheetScript');
-    if(oldScript) oldScript.remove();
+      clearBanner();
 
-    var script = document.createElement('script');
-    script.id = 'sheetScript';
-    script.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:json;responseHandler:' + cbName + '&_=' + Date.now();
-    script.onerror = function(){
-      clearTimeout(timeoutId);
+      boardEl.classList.remove('hidden');
+      setActiveLeg(activeLeg);
+      render();
+      updatedAt.textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    }).catch(function(){
       refreshBtn.classList.remove('spinning');
-      showBanner('error', 'Could not reach the sheet. Check that it is shared as "Anyone with the link can view", then try again.', true);
-      window[cbName] = null;
-    };
-    document.body.appendChild(script);
+      showBanner('error', 'Could not reach the sheets. Check that they are shared as "Anyone with the link can view", then try again.', true);
+    });
   }
 
   refreshBtn.addEventListener('click', loadData);
