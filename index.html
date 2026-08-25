@@ -478,6 +478,11 @@
     font-weight:500;
     min-height:24px;
   }
+  .bib-row a.strava-link.strava-valid{color:var(--sage-dark);}
+  .bib-row a.strava-link.strava-valid:hover{color:var(--sage);}
+  .bib-row a.strava-link.strava-invalid{color:var(--orange-dark);}
+  .bib-row a.strava-link.strava-invalid:hover{color:var(--orange);}
+  .bib-row .strava-invalid-text{color:var(--orange-dark);font-weight:500;}
   .bib-row a:hover{text-decoration:underline;}
   .bib-note{
     margin-top:10px;
@@ -739,6 +744,17 @@
     return 'https://www.strava.com/athletes/search?text=' + encodeURIComponent(term);
   }
 
+  function isStravaValid(raw){
+    if(!raw || !raw.trim()) return false;
+    var lower = raw.trim().toLowerCase();
+    if(lower === 'lupa' || lower === 'takada') return false;
+    var url = stravaUrl(raw);
+    if(!url) return false;
+    if(/strava\.com\/athletes\/\d+/i.test(url)) return true;
+    if(/strava\.app\.link/i.test(url)) return true;
+    return false;
+  }
+
   function stravaLabel(raw){
     var s = raw.trim();
     if(/^https?:\/\//i.test(s) || /strava\.(com|app)/i.test(s)) return 'Strava profile';
@@ -748,12 +764,14 @@
   function stravaHtml(raw){
     var url = stravaUrl(raw);
     if(!url){
-      if(!raw || !raw.trim()) return '<span class="val">&mdash;</span>';
+      if(!raw || !raw.trim()) return '<span class="val strava-invalid-text">&mdash;</span>';
       var lower = raw.trim().toLowerCase();
-      if(lower === 'lupa' || lower === 'takada') return '<span class="val">not provided</span>';
-      return '<span class="val">'+escapeHtml(raw.trim())+'</span>';
+      if(lower === 'lupa' || lower === 'takada') return '<span class="val strava-invalid-text">not provided</span>';
+      return '<span class="val strava-invalid-text">'+escapeHtml(raw.trim())+'</span>';
     }
-    return '<a class="strava-link" href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(stravaLabel(raw))+' '+iconSvg('link')+'</a>';
+    var valid = isStravaValid(raw);
+    var cls = 'strava-link ' + (valid ? 'strava-valid' : 'strava-invalid');
+    return '<a class="'+cls+'" href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(stravaLabel(raw))+' '+iconSvg('link')+'</a>';
   }
 
   function buildBibCard(runner, bibNo){

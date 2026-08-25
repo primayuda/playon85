@@ -34,6 +34,8 @@ favicon.png
 .cursor/SESSION.md       # This resume file
 ```
 
+**Local only (not in repo):** `scripts/` and `reports/` for Strava normalization tooling; listed in `.git/info/exclude`.
+
 ## Stack & data flow
 
 - Static HTML/CSS/JS — no build step
@@ -67,58 +69,38 @@ Runners are bucketed into **R16** and **R8** only (`parseCategories` on col 5). 
 3. **Team Support column** — Replaces former R4 column; clay/amber styling; `buildTsCard()` shows name, major, city, legs (3-line clamp), support type badges, vehicle, with-who, notes
 4. **Mobile** (≤860px) — 2×2 stat grid; tap **R16 / R8 / TS** pills to switch single-column view; column headers hidden
 5. **Strava links** on runner cards:
-   - Full URLs (including `strava.app.link`) open directly
-   - Usernames/names link to Strava athlete search
+   - Full athlete URLs (`/athletes/{id}`) and `strava.app.link` → **green** (`.strava-valid`, `--sage-dark`)
+   - Search links, usernames-only, missing, `Lupa` / `Takada` → **red** (`.strava-invalid` / `.strava-invalid-text`, `--orange-dark`)
+   - `isStravaValid()` classifies client-side; no Strava API calls
    - Sheet `HYPERLINK(...)` formulas parsed via `getCell()`
-   - `Lupa` / `Takada` shown as “not provided”
 6. **Phone numbers** — not shown on dashboard (runners or TS)
 7. **README** — Updated for R16/R8/TS; viewport screenshots from live site:
    - Desktop: `docs/screenshot-desktop.png` (1440×900, three columns incl. Team Support)
    - Mobile: `docs/screenshot-mobile.png` (iPhone 13 profile); shown in README at `width="320"` via HTML `<img>` to avoid full-width blow-up
 
+## Strava data (sheet col 8)
+
+- **All 22 runners** updated manually to canonical `https://www.strava.com/athletes/{id}` URLs (verified via local normalization script + HTTP spot-check, Aug 2026).
+- **Strava API validation not implemented** — user chose manual sheet cleanup instead of GitHub Action / OAuth pipeline.
+- Re-check locally: `node scripts/report-strava-normalization.js` (writes `reports/strava-normalization.md`).
+
 ## Key JS symbols (`index.html`)
 
 - `RUNNER_SHEET_ID`, `TS_SHEET_ID`, `allRunners`, `allTs`, `boardSections = ['R16','R8','TS']`
 - `parseRunners()`, `parseTs()`, `buildBibCard()`, `buildTsCard()`, `fetchSheet()`, `render()`
+- `stravaUrl()`, `isStravaValid()`, `stravaHtml()`, `stravaLabel()`
 - Transport filter applies to R16/R8 only; search applies to runners and TS by name/city
 
 ## Recent commits
 
 | Commit   | Summary |
 |----------|---------|
+| `dc4ce35` | Update session resume with README screenshot work |
 | `c87fa68` | Constrain README mobile screenshot to 320px width |
 | `0850001` | iPhone 13 viewport for README mobile screenshot |
-| `3b356d6` | Fix README desktop screenshot (TS not R4); new filename for cache bust |
+| `3b356d6` | Fix README desktop screenshot (TS not R4) |
 | `5891c5b` | Update README and screenshots for R16/R8/TS layout |
-| `2b01529` | Update session resume notes |
 | `b0a0bc0` | Replace R4 column with Team Support from second sheet |
-| `e8405e6` | Header total counts unique runners only |
-
-## In progress / discussed — NOT implemented
-
-### Strava API validation
-
-User asked to connect to Strava API and validate runner Strava IDs. **Not built yet** — blocked on architecture + credentials.
-
-**Why static site alone cannot do it:**
-- Strava API requires OAuth app (client ID + secret) and Bearer token on every request
-- Secrets must not live in browser; needs server-side proxy or scheduled job
-
-**Runner Strava field is messy** (typical entries): full names, usernames (e.g. `@handle`), `strava.app.link` URLs, direct `/athletes/{id}` URLs, `Lupa`.
-
-**Proposed validation tiers:**
-- **Verified** — numeric athlete ID + `GET /api/v3/athletes/{id}` succeeds (optional name fuzzy-match)
-- **Resolved** — app link expanded to athlete ID (server-side redirect follow)
-- **Unverified** — username/text only (no Strava search API)
-- **Invalid** — ID returns 404
-- **Missing** — empty / Lupa / Takada
-
-**Recommended approach:** GitHub Action (nightly) + `strava-validation.json` committed or published as artifact; dashboard loads cache. Alternative: Cloudflare Worker for live validation.
-
-**User decisions still needed:**
-1. GitHub Action cache vs Cloudflare Worker?
-2. Strava app credentials as GitHub secrets (client ID, secret, refresh token)
-3. Validation strictness: ID exists only vs also match registration name?
 
 ## Safe to share / publish
 
@@ -131,10 +113,11 @@ User asked to connect to Strava API and validate runner Strava IDs. **Not built 
 - Strava client secret, access tokens, refresh tokens
 - Runner names or registration PII
 - API keys or `.env` files
+- Local `scripts/` / `reports/` normalization tooling
 
 ## Possible next steps
 
-- Implement Strava validation pipeline (see above)
 - Custom domain for GitHub Pages
 - Column index changes if Google Sheet layout changes (see `parseRunners` / `parseTs`)
 - Re-capture README screenshots after major UI changes (Playwright + live site URL)
+- Re-run local Strava normalization if sheet Strava column changes
