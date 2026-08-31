@@ -718,6 +718,15 @@
     return raw.split('/').map(function(s){ return s.trim().toUpperCase(); }).filter(Boolean);
   }
 
+  var categoryPriority = ['R4', 'R8', 'R16'];
+
+  function primaryCategory(categories){
+    for(var i = 0; i < categoryPriority.length; i++){
+      if(categories.indexOf(categoryPriority[i]) !== -1) return categoryPriority[i];
+    }
+    return null;
+  }
+
   function transportKind(raw){
     if(!raw) return null;
     var s = raw.toLowerCase();
@@ -856,9 +865,8 @@
 
     var buckets = { R16: [], R8: [], R4: [] };
     allRunners.forEach(function(r){
-      r.categories.forEach(function(cat){
-        if(buckets[cat]) buckets[cat].push(r);
-      });
+      var cat = primaryCategory(r.categories);
+      if(cat && buckets[cat]) buckets[cat].push(r);
     });
 
     var totalUnique = allRunners.length;
@@ -868,7 +876,7 @@
     document.getElementById('statR4').textContent = buckets.R4.length;
     document.getElementById('statTS').textContent = allTs.length;
 
-    ['R16','R8','R4'].forEach(function(cat){
+    ['R4','R8','R16'].forEach(function(cat){
       var colEl = document.getElementById('col'+cat);
       var countEl = document.getElementById('count'+cat);
       var list = buckets[cat].filter(function(r){
