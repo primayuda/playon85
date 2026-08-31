@@ -70,7 +70,7 @@ favicon.png
 - **Stat pills:** unique runners, R16, R8, R4, TS
 - **Multi-leg runners:** assigned to **one column only** via `primaryCategory()` — priority **R4 → R8 → R16**
   - e.g. `R8/R16` → R8 column only; card badge still shows `R8 / R16`
-- **Sheet note (Aug 2026):** no rows with `R4` in Kategori yet — R4 column empty until registrations added
+- **Sheet note (Aug 2026):** R4 registrations present in Kategori (e.g. `R4`, `R8/R4`); column populates from sheet data
 
 ## Features implemented
 
@@ -83,7 +83,7 @@ favicon.png
    - Invalid/missing → **red** (`.strava-invalid` / `.strava-invalid-text`)
    - `isStravaValid()` — client-side only; no Strava API
 6. **Phone numbers** — not shown on dashboard (runners or TS)
-7. **README** — Still describes R16/R8/TS three-column layout; screenshots pre-R4 — **needs refresh** if UI docs should match live site
+7. **README** — Four-column layout, category priority, R4 stat pill, Strava green links; screenshots refreshed from live site (`docs/screenshot-desktop.png`, `docs/screenshot-mobile.png`)
 
 ## Strava data (sheet col 8)
 
@@ -103,11 +103,11 @@ favicon.png
 
 | Commit   | Summary |
 |----------|---------|
+| `2c71f1f` | README + screenshots for R16, R8, R4, TS layout |
+| `80d8e46` | Session resume for R4 column and category priority |
 | `20adf14` | Multi-leg runners: single column by priority R4 → R8 → R16 |
 | `d8d3d5c` | Restore R4 column (R16, R8, R4, TS four-column layout) |
 | `e7283d9` | Green/red Strava link styling |
-| `dc4ce35` | Session resume; README screenshot work |
-| `b0a0bc0` | Team Support column from second sheet (replaced old R4-only layout) |
 
 ## Safe to share / publish
 
@@ -123,7 +123,6 @@ favicon.png
 
 ## Possible next steps
 
-- Add R4 registrations in runner sheet (Kategori col)
-- Update README + re-capture screenshots for four-column layout
 - Custom domain for GitHub Pages
-- Re-run local Strava normalization after sheet changes
+- Re-run local Strava normalization after sheet changes (`node scripts/report-strava-normalization.js`)
+- Re-capture mobile screenshot with WebKit/iPhone profile if finer fidelity needed (current mobile shot: Chromium 390×844)
