@@ -40,7 +40,7 @@
     -webkit-font-smoothing:antialiased;
   }
 
-  .wrap{max-width:1180px;margin:0 auto;padding:0 24px 64px;}
+  .wrap{max-width:1400px;margin:0 auto;padding:0 24px 64px;}
   @supports (padding: max(0px)){
     body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);}
   }
@@ -53,7 +53,7 @@
     margin-bottom:28px;
   }
   header.top .inner{
-    max-width:1180px;
+    max-width:1400px;
     margin:0 auto;
     display:flex;
     align-items:flex-start;
@@ -122,6 +122,7 @@
   }
   .stat-pill.r16 .n{color:#8FAAE0;}
   .stat-pill.r8 .n{color:#7BAF9E;}
+  .stat-pill.r4 .n{color:#D4847A;}
   .stat-pill.ts .n{color:#C9B896;}
 
   button.stat-pill.leg-switch{
@@ -224,8 +225,11 @@
   /* ---------- columns ---------- */
   .board{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:22px;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+  }
+  @media (max-width:1100px){
+    .board{grid-template-columns:repeat(2,1fr);}
   }
   @media (max-width:860px){
     .board{grid-template-columns:1fr;gap:0;}
@@ -265,6 +269,7 @@
     button.stat-pill.leg-switch{cursor:pointer;width:100%;}
     button.stat-pill.r16.active{background:rgba(143,170,224,0.18);border-color:#8FAAE0;}
     button.stat-pill.r8.active{background:rgba(123,175,158,0.18);border-color:#7BAF9E;}
+    button.stat-pill.r4.active{background:rgba(212,132,122,0.18);border-color:#D4847A;}
     button.stat-pill.ts.active{background:rgba(201,184,150,0.22);border-color:#C9B896;}
 
     .toolbar{
@@ -363,6 +368,7 @@
   }
   .col.r16{--accent-color:var(--moss);--accent-dark:var(--moss-dark);--accent-tint:var(--moss-tint);}
   .col.r8{--accent-color:var(--sage);--accent-dark:var(--sage-dark);--accent-tint:var(--sage-tint);}
+  .col.r4{--accent-color:var(--orange);--accent-dark:var(--orange-dark);--accent-tint:var(--orange-tint);}
   .col.ts{--accent-color:var(--clay);--accent-dark:var(--clay-dark);--accent-tint:var(--clay-tint);}
 
   .cards{display:flex;flex-direction:column;gap:14px;}
@@ -525,6 +531,7 @@
         <div class="stat-pill"><span class="n" id="statTotal">&mdash;</span><span class="l">unique runners</span></div>
         <button type="button" class="stat-pill r16 leg-switch active" data-leg="R16" aria-pressed="true"><span class="n" id="statR16">&mdash;</span><span class="l">R16</span></button>
         <button type="button" class="stat-pill r8 leg-switch" data-leg="R8" aria-pressed="false"><span class="n" id="statR8">&mdash;</span><span class="l">R8</span></button>
+        <button type="button" class="stat-pill r4 leg-switch" data-leg="R4" aria-pressed="false"><span class="n" id="statR4">&mdash;</span><span class="l">R4</span></button>
         <button type="button" class="stat-pill ts leg-switch" data-leg="TS" aria-pressed="false"><span class="n" id="statTS">&mdash;</span><span class="l">TS</span></button>
       </div>
     </div>
@@ -565,6 +572,10 @@
       <div class="col-head"><span class="title">R8</span><span class="count" id="countR8">0 runners</span></div>
       <div class="cards" id="colR8"></div>
     </div>
+    <div class="col r4" id="colWrapR4">
+      <div class="col-head"><span class="title">R4</span><span class="count" id="countR4">0 runners</span></div>
+      <div class="cards" id="colR4"></div>
+    </div>
     <div class="col ts" id="colWrapTS">
       <div class="col-head"><span class="title">Team Support</span><span class="count" id="countTS">0 supporters</span></div>
       <div class="cards" id="colTS"></div>
@@ -585,7 +596,7 @@
   var callbackCounter = 0;
   var allRunners = [];
   var allTs = [];
-  var boardSections = ['R16', 'R8', 'TS'];
+  var boardSections = ['R16', 'R8', 'R4', 'TS'];
 
   var boardEl = document.getElementById('board');
   var statRowEl = document.getElementById('statRow');
@@ -843,7 +854,7 @@
     var query = searchInput.value.trim().toLowerCase();
     var tFilter = transportFilter.value;
 
-    var buckets = { R16: [], R8: [] };
+    var buckets = { R16: [], R8: [], R4: [] };
     allRunners.forEach(function(r){
       r.categories.forEach(function(cat){
         if(buckets[cat]) buckets[cat].push(r);
@@ -854,9 +865,10 @@
     document.getElementById('statTotal').textContent = totalUnique;
     document.getElementById('statR16').textContent = buckets.R16.length;
     document.getElementById('statR8').textContent = buckets.R8.length;
+    document.getElementById('statR4').textContent = buckets.R4.length;
     document.getElementById('statTS').textContent = allTs.length;
 
-    ['R16','R8'].forEach(function(cat){
+    ['R16','R8','R4'].forEach(function(cat){
       var colEl = document.getElementById('col'+cat);
       var countEl = document.getElementById('count'+cat);
       var list = buckets[cat].filter(function(r){
